@@ -1,6 +1,8 @@
+import { LanguageCode } from '@constants/languages';
+import { SearchParameters } from '@interfaces/search';
+
 export type SearchState = {
-  query: string;
-  page: number;
-  from: string;
-  to: string;
+  currentSearchParams: SearchParameters;
+  submittedSearchParams: SearchParameters;
+  favoriteLanguages: LanguageCode[];
 };

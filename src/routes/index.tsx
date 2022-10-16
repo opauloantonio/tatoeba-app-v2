@@ -1,132 +1,56 @@
-import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import useTheme from '@hooks/useTheme';
+import useHideSplashScreen from '@hooks/useHideSplashScreen';
 
-import Home from '@screens/Home';
-import About from '@screens/About';
-import History from '@screens/History';
-import Bookmarks from '@screens/Bookmarks';
-import { getCurrentTheme } from '@utils/themes';
+import HomeTab from './HomeTab';
+import AboutTab from './AboutTab';
+import HistoryTab from './HistoryTab';
+import BookmarksTab from './BookmarksTab';
 
-const HomeStack = createStackNavigator();
-const AboutStack = createStackNavigator();
-const BookmarksStack = createStackNavigator();
-const HistoryStack = createStackNavigator();
-
-const appTheme = getCurrentTheme();
-
-const defaultStackScreenOptions = {
-  headerStyle: { backgroundColor: appTheme.colors.primary },
-  headerTintColor: 'white',
-  headerStatusBarHeight: 0,
-};
-
-function HomeTab() {
-  return (
-    <HomeStack.Navigator screenOptions={defaultStackScreenOptions}>
-      <HomeStack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerTitle: 'Tatoeba',
-        }}
-      />
-
-      {/**
-      <HomeStack.Screen
-        name="SearchResults"
-        component={SearchResults}
-        options={({ route }) => ({
-          title: `Results for "${route.params.text}"`,
-        })}
-      />
-
-      <HomeStack.Screen
-        name="SentenceDetails"
-        component={SentenceDetails}
-        options={({ route }) => ({
-          title: `Sentence #${route.params.id}`,
-        })}
-      />
-
-      <HomeStack.Screen
-        name="ChooseLanguage"
-        component={ChooseLanguage}
-        options={{
-          headerTitle: 'Language Selection',
-        }}
-      />
-       */}
-    </HomeStack.Navigator>
-  );
-}
-
-function AboutTab() {
-  return (
-    <AboutStack.Navigator screenOptions={defaultStackScreenOptions}>
-      <AboutStack.Screen name="About" component={About} />
-    </AboutStack.Navigator>
-  );
-}
-
-function HistoryTab() {
-  return (
-    <HistoryStack.Navigator screenOptions={defaultStackScreenOptions}>
-      <AboutStack.Screen name="History" component={History} />
-    </HistoryStack.Navigator>
-  );
-}
-
-function BookmarksTab() {
-  return (
-    <BookmarksStack.Navigator screenOptions={defaultStackScreenOptions}>
-      <AboutStack.Screen name="Bookmarks" component={Bookmarks} />
-    </BookmarksStack.Navigator>
-  );
-}
+import { ScreenName, BottomTabLabel } from './constants';
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator();
 
 function BottomTabs() {
+  useHideSplashScreen();
   const theme = useTheme();
 
   return (
     <Navigator activeColor={theme.colors.primary}>
       <Screen
-        name="HomeTab"
+        name={ScreenName.HomeTab}
         component={HomeTab}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: BottomTabLabel.Home,
           tabBarIcon: ({ color }) => <Icon size={25} color={color} name="home" />,
         }}
       />
 
       <Screen
-        name="BookmarksTab"
+        name={ScreenName.BookmarksTab}
         component={BookmarksTab}
         options={{
-          tabBarLabel: 'Bookmarks',
+          tabBarLabel: BottomTabLabel.Bookmarks,
           tabBarIcon: ({ color }) => <Icon size={25} color={color} name="bookmark" />,
         }}
       />
 
       <Screen
-        name="HistoryTab"
+        name={ScreenName.HistoryTab}
         component={HistoryTab}
         options={{
-          tabBarLabel: 'History',
+          tabBarLabel: BottomTabLabel.History,
           tabBarIcon: ({ color }) => <Icon size={25} color={color} name="history" />,
         }}
       />
 
       <Screen
-        name="AboutTab"
+        name={ScreenName.AboutTab}
         component={AboutTab}
         options={{
-          tabBarLabel: 'About',
+          tabBarLabel: BottomTabLabel.About,
           tabBarIcon: ({ color }) => <Icon size={25} color={color} name="information" />,
         }}
       />

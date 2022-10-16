@@ -9,10 +9,12 @@ with open('language_data.json', encoding='utf-8') as f:
 
 with open('languages.ts', 'w', encoding='utf-8') as f:
     lines = [
+      'import { ImageSourcePropType } from \'react-native\';\n\n'
+      '/* eslint-disable max-len */\n',
       'export type Language = {\n',
-      '  code: LanguageCode;\n',
       '  name: string;\n',
-      '  icon: any;\n',
+      '  code: LanguageCode;\n',
+      '  icon: ImageSourcePropType;\n',
       '};\n\n',
 
       'export const languages: Language[] = [\n',

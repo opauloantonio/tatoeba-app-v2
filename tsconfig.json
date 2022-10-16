@@ -13,6 +13,7 @@
       "@components/*": ["components/*"],
       "@constants/*": ["constants/*"],
       "@hooks/*": ["hooks/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@context/*": ["context/*"],
       "@routes/*": ["routes/*"],
       "@screens/*": ["screens/*"],

@@ -46,10 +46,16 @@ public class MainActivity extends ReactActivity {
       // More on this on https://reactjs.org/blog/2022/03/29/react-v18.html
       return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     }
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(null);
-    }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    // native splash screen which will be skipped
+    androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+    
+    // custom splash screen from RN lib
+    org.devio.rn.splashscreen.SplashScreen.show(this, true);
+
+    super.onCreate(null);
   }
 }

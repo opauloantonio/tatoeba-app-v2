@@ -1,61 +1,141 @@
-// import { useEffect, useState } from 'react';
-import { Stack } from '@mobily/stacks';
+import { useNavigation } from '@react-navigation/native';
+
 import {
-  // Button,
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+
+import {
   Text,
+  Button,
+  Searchbar,
 } from 'react-native-paper';
-// import { useGetSentenceByIdQuery } from '@services/tatoebaApi';
 
-import { languages } from '@constants/languages';
-import { Image } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const { name, icon } = languages.find((l) => l.code === 'bal')!;
+import useTheme from '@hooks/useTheme';
+import useHeaderTitle from '@hooks/useHeaderTitle';
+import useAppDispatch from '@hooks/useAppDispatch';
+import useAppSelector from '@hooks/useAppSelector';
+import { SearchParameters } from '@interfaces/search';
+
+import {
+  submitSearchParams,
+  setCurrentSearchParams,
+} from '@slices/search';
+
+import { getLanguageName } from '@utils/languages';
+
+import { ScreenName } from '@routes/constants';
+import { HomeNavigationProps } from '@routes/HomeTab/types';
 
 function Home() {
-  /**
-  const getId = () => Math.floor(Math.random() * (300000 - 1) + 1);
+  useHeaderTitle('Tatoeba');
 
-  const [id, setId] = useState(getId);
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<HomeNavigationProps>();
 
-  const {
-    error,
-    isFetching,
-    data: sentence,
-  } = useGetSentenceByIdQuery(id);
+  const { currentSearchParams } = useAppSelector((state) => state.search);
 
-  useEffect(() => {
-    if (sentence) {
-      console.log(JSON.stringify(sentence, null, 2));
-    }
-  }, [sentence]);
+  const handleUpdateSearch = (params: Partial<SearchParameters>) => {
+    dispatch(setCurrentSearchParams(params));
+  };
 
-  useEffect(() => {
-    if (error) {
-      console.log(JSON.stringify(error, null, 2));
-    }
-  }, [error]);
+  const handleSubmitSearch = () => {
+    dispatch(setCurrentSearchParams({ ...currentSearchParams, page: 1 }));
+    dispatch(submitSearchParams());
+    navigation.navigate(ScreenName.SearchResults);
+  };
 
-  const getAnother = () => setId(getId());
-   */
+  const swapLanguages = () => {
+    const { to, from } = currentSearchParams;
+    dispatch(setCurrentSearchParams({ to: from, from: to }));
+  };
 
   return (
-    <Stack space={20} style={{ paddingHorizontal: 20 }}>
-      <Text>Home Screen</Text>
+    <ScrollView style={styles.container}>
+      <View style={styles.content}>
+        <Searchbar
+          value={currentSearchParams.query}
+          placeholder="Search for sentences"
+          onSubmitEditing={handleSubmitSearch}
+          onChangeText={(query) => handleUpdateSearch({ query })}
+        />
+      </View>
 
-      {/**
-      <Text>sentence ID: {id}</Text>
-      <Text>{`is Fetching ? ${isFetching}`}</Text>
+      <View style={styles.languagesRow}>
+        <TouchableOpacity
+          style={styles.languageChoiceWrapper}
+          onPress={() => navigation.navigate(ScreenName.ChooseLanguage, { target: 'from' })}
+        >
+          <Text style={{ ...styles.languageChoice, color: theme.colors.primary }}>
+            {getLanguageName(currentSearchParams.from)}
+          </Text>
+        </TouchableOpacity>
 
-      <Button onPress={getAnother} mode="contained">
-        GET ANOTHER
-      </Button>
-       */}
+        <TouchableOpacity onPress={swapLanguages}>
+          <Text style={styles.swapLanguagesIcon}>
+            <Icon
+              size={25}
+              name="swap-horizontal"
+              color={theme.colors.primary}
+            />
+          </Text>
+        </TouchableOpacity>
 
-      <Text>{name}</Text>
+        <TouchableOpacity
+          style={styles.languageChoiceWrapper}
+          onPress={() => navigation.navigate(ScreenName.ChooseLanguage, { target: 'to' })}
+        >
+          <Text
+            style={{
+              ...styles.languageChoice,
+              color: theme.colors.primary,
+              textAlign: 'right',
+            }}>
+            {getLanguageName(currentSearchParams.to)}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <Image style={{ width: 30, height: 20 }} source={icon} />
-    </Stack>
+      <View style={styles.content}>
+        <Button mode="contained" onPress={handleSubmitSearch}>
+          <Text style={styles.searchButtonText}>SEARCH</Text>
+        </Button>
+      </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  content: {
+    marginVertical: 16,
+  },
+  searchButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  languagesRow: {
+    flexDirection: 'row',
+    marginVertical: 16,
+    alignItems: 'center',
+  },
+  languageChoice: {
+    fontSize: 20,
+  },
+  languageChoiceWrapper: {
+    flex: 1,
+  },
+  swapLanguagesIcon: {
+    paddingHorizontal: 20,
+  },
+});
 
 export default Home;

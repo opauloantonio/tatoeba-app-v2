@@ -23,6 +23,7 @@
             "@constants": "./src/constants",
             "@routes": "./src/routes",
             "@hooks": "./src/hooks",
+            "@interfaces": "./src/interfaces",
             "@context": "./src/context",
             "@screens": "./src/screens",
             "@services": "./src/services",
