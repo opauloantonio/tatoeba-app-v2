@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import Error from '@components/Error';
 import useHeaderTitle from '@hooks/useHeaderTitle';
@@ -40,9 +40,9 @@ function SentenceDetails() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <SentenceContainer sentence={data} />
-    </View>
+    </ScrollView>
   );
 }
 
