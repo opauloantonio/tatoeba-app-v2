@@ -27,7 +27,7 @@ import {
 } from '@slices/search';
 
 import { HomeNavigationProps } from '@routes/HomeTab/types';
-import { ChooseLanguageRouteProps } from './types';
+import { ChooseLanguageRouteProps, IRenderLanguage } from './types';
 
 function ChooseLanguage() {
   const [search, setSearch] = useState('');
@@ -56,6 +56,26 @@ function ChooseLanguage() {
     const headerTitle = target === 'from' ? 'Translate from' : 'Translate to';
     navigation.setOptions({ headerTitle });
   }, [navigation, route.params]);
+
+  const renderLanguage = ({ item }: IRenderLanguage) => (
+    <TouchableOpacity
+      style={styles.language}
+      onPress={() => handleOnSelectLanguage(item.code)}
+    >
+      <Image source={item.icon} style={styles.flag} />
+
+      <Text style={styles.languageName}>{item.name}</Text>
+
+      <TouchableOpacity onPress={() => toggleFavorite(item.code)}>
+        <Icon
+          size={22}
+          name="heart"
+          style={{ paddingRight: 10 }}
+          color={favoriteLanguages.includes(item.code) ? 'red' : 'grey'}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
 
   const languageList = useMemo(() => {
     // if we have favorites, we display them above the others
@@ -96,25 +116,7 @@ function ChooseLanguage() {
 
       <FlatList
         data={languageList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.language}
-            onPress={() => handleOnSelectLanguage(item.code)}
-          >
-            <Image source={item.icon} style={styles.flag} />
-
-            <Text style={styles.languageName}>{item.name}</Text>
-
-            <TouchableOpacity onPress={() => toggleFavorite(item.code)}>
-              <Icon
-                size={22}
-                name="heart"
-                style={{ paddingRight: 10 }}
-                color={favoriteLanguages.includes(item.code) ? 'red' : 'grey'}
-              />
-            </TouchableOpacity>
-          </TouchableOpacity>
-        )}
+        renderItem={renderLanguage}
         keyExtractor={(item) => item.code}
       />
     </View>

@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ErrorProps } from './types';
 
 function Error({ message, retry }: ErrorProps) {
   return (
     <View style={styles.container}>
-      <Icon name="warning" color="#8B0000" size={100} />
+      <Icon name="alert" color="#8B0000" size={100} />
 
       <Text style={styles.text}>
         {message}

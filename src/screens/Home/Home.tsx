@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -16,20 +17,24 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import useTheme from '@hooks/useTheme';
+import useToggle from '@hooks/useToggle';
 import useHeaderTitle from '@hooks/useHeaderTitle';
 import useAppDispatch from '@hooks/useAppDispatch';
 import useAppSelector from '@hooks/useAppSelector';
-import { SearchParameters } from '@interfaces/search';
 
 import {
   submitSearchParams,
   setCurrentSearchParams,
+  clearAdvancedSearchParams,
+  resetSearchParams,
 } from '@slices/search';
 
-import { getLanguageName } from '@utils/languages';
-
+import { getSearchURL } from '@utils/search';
 import { ScreenName } from '@routes/constants';
+import { getLanguageName } from '@utils/languages';
+import { SearchParameters } from '@interfaces/search';
 import { HomeNavigationProps } from '@routes/HomeTab/types';
+import AdvancedSearchForm from '@components/AdvancedSearchForm';
 
 function Home() {
   useHeaderTitle('Tatoeba');
@@ -37,6 +42,8 @@ function Home() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeNavigationProps>();
+
+  const [showAdvancedSearch, toggleShowAdvancedSearch] = useToggle(false);
 
   const { currentSearchParams } = useAppSelector((state) => state.search);
 
@@ -54,6 +61,16 @@ function Home() {
     const { to, from } = currentSearchParams;
     dispatch(setCurrentSearchParams({ to: from, from: to }));
   };
+
+  useEffect(() => {
+    dispatch(clearAdvancedSearchParams());
+  }, [dispatch]);
+
+  const searchUrl = __DEV__ ? (
+    <Text style={{ marginTop: 16 }}>
+      (Dev only): {getSearchURL(currentSearchParams)}
+    </Text>
+  ) : null;
 
   return (
     <ScrollView style={styles.container}>
@@ -106,6 +123,30 @@ function Home() {
           <Text style={styles.searchButtonText}>SEARCH</Text>
         </Button>
       </View>
+
+      <View>
+        <Button
+          mode="text"
+          onPress={toggleShowAdvancedSearch}
+          icon={showAdvancedSearch ? 'chevron-up' : 'chevron-down'}
+        >
+          {!showAdvancedSearch ? 'SHOW' : 'HIDE'} ADVANCED SEARCH OPTIONS
+        </Button>
+      </View>
+
+      {showAdvancedSearch && (
+        <>
+          <AdvancedSearchForm />
+
+          {searchUrl}
+
+          <View style={{ marginVertical: 16 }}>
+            <Button mode="contained" onPress={() => dispatch(resetSearchParams())}>
+              <Text style={styles.searchButtonText}>RESET SEARCH OPTIONS</Text>
+            </Button>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 }

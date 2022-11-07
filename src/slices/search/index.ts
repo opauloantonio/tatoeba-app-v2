@@ -33,13 +33,26 @@ export const searchSlice = createSlice({
     toggleFavoriteLanguage(state, { payload }: PayloadAction<LanguageCode>) {
       state.favoriteLanguages = xor(state.favoriteLanguages, [payload]);
     },
+    resetSearchParams(state) {
+      state.currentSearchParams = initialSearchParams;
+    },
+    clearAdvancedSearchParams(state) {
+      state.currentSearchParams = {
+        ...initialSearchParams,
+        to: state.currentSearchParams.to,
+        from: state.currentSearchParams.from,
+        query: state.currentSearchParams.query,
+      };
+    },
   },
 });
 
 export const {
+  resetSearchParams,
   submitSearchParams,
   setCurrentSearchParams,
   toggleFavoriteLanguage,
+  clearAdvancedSearchParams,
 } = searchSlice.actions;
 
 export default searchSlice.reducer;
