@@ -1,43 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useColorScheme as useDeviceColorScheme } from 'react-native';
 
-import { AppState, Appearance } from 'react-native';
-
-import { store } from '../store';
+import useAppSelector from './useAppSelector';
+import useAppStateChange from './useAppStateChange';
 
 function useColorScheme(): 'light' | 'dark' {
-  const [userSetting] = useState(store.getState().settings.theme);
+  const deviceColorScheme = useDeviceColorScheme();
+  const { theme } = useAppSelector((state) => state.settings);
 
   const [scheme, setScheme] = useState(
-    userSetting === 'system' ? Appearance.getColorScheme() || 'light' : userSetting,
+    theme === 'system' ? deviceColorScheme || 'light' : theme
   );
 
-  const setThemeFromSettings = () => {
-    const systemTheme = Appearance.getColorScheme();
-    const settingsTheme = store.getState().settings.theme;
-
-    if (settingsTheme === 'system') {
-      if (!systemTheme) {
-        setScheme('light');
-      } else {
-        setScheme(systemTheme);
-      }
-    } else {
-      setScheme(settingsTheme);
-    }
-  };
+  const updateColorScheme = useCallback(() => {
+    setScheme(theme === 'system' ? deviceColorScheme || 'light' : theme);
+  }, [theme, deviceColorScheme]);
 
   useEffect(() => {
-    const systemThemeSubscription = AppState.addEventListener('change', () => {
-      setThemeFromSettings();
-    });
+    updateColorScheme();
+  }, [updateColorScheme]);
 
-    const unsubscribeFromStore = store.subscribe(setThemeFromSettings);
-
-    return () => {
-      systemThemeSubscription.remove();
-      unsubscribeFromStore();
-    };
-  }, []);
+  useAppStateChange({
+    onEnterForeground() {
+      updateColorScheme();
+    },
+  });
 
   return scheme;
 }
