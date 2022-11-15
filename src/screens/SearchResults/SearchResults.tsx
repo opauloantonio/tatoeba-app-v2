@@ -1,7 +1,13 @@
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native-paper';
-import { FlatList, StyleSheet, View } from 'react-native';
+
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  ListRenderItem,
+} from 'react-native';
 
 import Error from '@components/Error';
 import SentenceContainer from '@components/SentenceContainer';
@@ -13,8 +19,6 @@ import useAppSelector from '@hooks/useAppSelector';
 import { Sentence } from '@interfaces/api';
 import { useGetSearchResultsQuery } from '@services/tatoebaApi';
 import { setCurrentSearchParams, submitSearchParams } from '@slices/search';
-
-import { IRenderSearchResult } from './types';
 
 function SearchResults() {
   const dispatch = useAppDispatch();
@@ -57,7 +61,7 @@ function SearchResults() {
     }
   };
 
-  const renderSearchResult = ({ item, index }: IRenderSearchResult) => (
+  const renderSearchResult: ListRenderItem<Sentence> = ({ item, index }) => (
     <View style={{ marginBottom: 20, marginTop: index === 0 ? 20 : 0 }}>
       <SentenceContainer sentence={item} />
     </View>

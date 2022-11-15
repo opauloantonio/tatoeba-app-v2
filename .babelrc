@@ -20,6 +20,7 @@
             "@assets": "./src/assets",
             "@modules": "./src/modules",
             "@components": "./src/components",
+            "@database": "./src/database",
             "@constants": "./src/constants",
             "@routes": "./src/routes",
             "@hooks": "./src/hooks",

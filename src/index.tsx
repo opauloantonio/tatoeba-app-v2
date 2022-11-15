@@ -8,22 +8,27 @@ import NavigationProvider from '@context/Navigation/NavigationProvider';
 
 import StatusBar from '@components/StatusBar';
 import { store, persistor } from './store';
+import RealmContext from './database';
 import BottomTabs from './routes';
+
+const { RealmProvider } = RealmContext;
 
 function App() {
   return (
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider>
-          <StacksProvider spacing={1}>
-            <SafeAreaProvider>
-              <NavigationProvider>
-                <StatusBar />
-                <BottomTabs />
-              </NavigationProvider>
-            </SafeAreaProvider>
-          </StacksProvider>
-        </ThemeProvider>
+        <RealmProvider>
+          <ThemeProvider>
+            <StacksProvider spacing={1}>
+              <SafeAreaProvider>
+                <NavigationProvider>
+                  <StatusBar />
+                  <BottomTabs />
+                </NavigationProvider>
+              </SafeAreaProvider>
+            </StacksProvider>
+          </ThemeProvider>
+        </RealmProvider>
       </PersistGate>
     </ReduxProvider>
   );

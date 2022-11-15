@@ -2,29 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import { useColorScheme as useDeviceColorScheme } from 'react-native';
 
 import useAppSelector from './useAppSelector';
-import useAppStateChange from './useAppStateChange';
 
 function useColorScheme(): 'light' | 'dark' {
   const deviceColorScheme = useDeviceColorScheme();
   const { theme } = useAppSelector((state) => state.settings);
 
-  const [scheme, setScheme] = useState(
+  const getUserScheme = useCallback(() => (
     theme === 'system' ? deviceColorScheme || 'light' : theme
-  );
+  ), [deviceColorScheme, theme]);
 
-  const updateColorScheme = useCallback(() => {
-    setScheme(theme === 'system' ? deviceColorScheme || 'light' : theme);
-  }, [theme, deviceColorScheme]);
+  const [scheme, setScheme] = useState(getUserScheme());
 
   useEffect(() => {
-    updateColorScheme();
-  }, [updateColorScheme]);
-
-  useAppStateChange({
-    onEnterForeground() {
-      updateColorScheme();
-    },
-  });
+    setScheme(getUserScheme());
+  }, [getUserScheme]);
 
   return scheme;
 }

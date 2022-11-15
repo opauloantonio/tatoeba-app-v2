@@ -1,5 +1,5 @@
-import { SearchState } from 'slices/search/types';
-import { SettingsState } from 'slices/settings/types';
+import { SearchState } from '@slices/search/types';
+import { SettingsState } from '@slices/settings/types';
 
 import { tatoebaApi } from '@services/tatoebaApi';
 

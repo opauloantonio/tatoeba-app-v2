@@ -22,6 +22,9 @@ import useHeaderTitle from '@hooks/useHeaderTitle';
 import useAppDispatch from '@hooks/useAppDispatch';
 import useAppSelector from '@hooks/useAppSelector';
 
+import RealmContext from '@database/index';
+import { History } from '@database/models/History';
+
 import {
   submitSearchParams,
   setCurrentSearchParams,
@@ -36,10 +39,13 @@ import { SearchParameters } from '@interfaces/search';
 import { HomeNavigationProps } from '@routes/HomeTab/types';
 import AdvancedSearchForm from '@components/AdvancedSearchForm';
 
+const { useRealm } = RealmContext;
+
 function Home() {
   useHeaderTitle('Tatoeba');
 
   const theme = useTheme();
+  const realm = useRealm();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeNavigationProps>();
 
@@ -52,8 +58,20 @@ function Home() {
   };
 
   const handleSubmitSearch = () => {
-    dispatch(setCurrentSearchParams({ ...currentSearchParams, page: 1 }));
+    const updatedParams = { ...currentSearchParams, page: 1 };
+    dispatch(setCurrentSearchParams(updatedParams));
     dispatch(submitSearchParams());
+
+    realm.write(() => {
+      realm.create<History>(
+        'History',
+        {
+          timestamp: new Date(),
+          url: getSearchURL(updatedParams),
+        },
+      );
+    });
+
     navigation.navigate(ScreenName.SearchResults);
   };
 

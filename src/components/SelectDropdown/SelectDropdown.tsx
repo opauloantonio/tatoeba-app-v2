@@ -1,27 +1,42 @@
-import { StyleSheet } from 'react-native';
+import { useCallback, useMemo } from 'react';
+
+import {
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSelectDropdown, { SelectDropdownProps } from 'react-native-select-dropdown';
 
-const dropDownIcon = () => <Icon name="chevron-down" size={20} />;
+import useTheme from '@hooks/useTheme';
 
 function SelectDropdown(props: SelectDropdownProps) {
+  const { colors } = useTheme();
+
+  const containerStyle: StyleProp<ViewStyle> = useMemo(() => ({
+    borderRadius: 8,
+    backgroundColor: colors.background,
+  }), [colors.background]);
+
+  const textStyle: StyleProp<TextStyle> = useMemo(() => ({
+    color: colors.text,
+  }), [colors.text]);
+
+  const dropDownIcon = useCallback(() => (
+    <Icon name="chevron-down" size={20} color={colors.text} />
+  ), [colors.text]);
+
   return (
     <RNSelectDropdown
-      buttonStyle={styles.buttonStyle}
+      rowTextStyle={textStyle}
+      buttonTextStyle={textStyle}
+      buttonStyle={containerStyle}
+      dropdownStyle={containerStyle}
       renderDropdownIcon={dropDownIcon}
-      dropdownStyle={styles.dropdownStyle}
       {...props}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    borderRadius: 8,
-  },
-  dropdownStyle: {
-    borderRadius: 8,
-  },
-});
 
 export default SelectDropdown;

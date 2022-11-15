@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Image,
   View,
   FlatList,
   StyleSheet,
+  ListRenderItem,
   TouchableOpacity,
 } from 'react-native';
 
@@ -13,6 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
+  Language,
   languages,
   LanguageCode,
 } from '@constants/languages';
@@ -20,6 +22,7 @@ import {
 import useDebounce from '@hooks/useDebounce';
 import useAppDispatch from '@hooks/useAppDispatch';
 import useAppSelector from '@hooks/useAppSelector';
+import useHeaderTitle from '@hooks/useHeaderTitle';
 
 import {
   toggleFavoriteLanguage,
@@ -27,7 +30,7 @@ import {
 } from '@slices/search';
 
 import { HomeNavigationProps } from '@routes/HomeTab/types';
-import { ChooseLanguageRouteProps, IRenderLanguage } from './types';
+import { ChooseLanguageRouteProps } from './types';
 
 function ChooseLanguage() {
   const [search, setSearch] = useState('');
@@ -38,6 +41,10 @@ function ChooseLanguage() {
   const navigation = useNavigation<HomeNavigationProps>();
   const { favoriteLanguages } = useAppSelector((state) => state.search);
 
+  const { target } = route.params;
+
+  useHeaderTitle(`Translate ${target}`);
+
   const handleSearch = (text: string) => setSearch(text);
 
   const toggleFavorite = (code: LanguageCode) => {
@@ -45,19 +52,11 @@ function ChooseLanguage() {
   };
 
   const handleOnSelectLanguage = (code: LanguageCode) => {
-    const { target } = route.params;
-    const updated = target === 'from' ? { from: code } : { to: code };
-    dispatch(setCurrentSearchParams(updated));
+    dispatch(setCurrentSearchParams({ [target]: code }));
     navigation.goBack();
   };
 
-  useEffect(() => {
-    const { target } = route.params;
-    const headerTitle = target === 'from' ? 'Translate from' : 'Translate to';
-    navigation.setOptions({ headerTitle });
-  }, [navigation, route.params]);
-
-  const renderLanguage = ({ item }: IRenderLanguage) => (
+  const renderLanguage: ListRenderItem<Language> = ({ item }) => (
     <TouchableOpacity
       style={styles.language}
       onPress={() => handleOnSelectLanguage(item.code)}
