@@ -78,16 +78,16 @@ function ChooseLanguage() {
 
   const languageList = useMemo(() => {
     // if we have favorites, we display them above the others
-  const favorites = languages.filter((l) => favoriteLanguages.includes(l.code));
-  const others = languages.filter((l) => !favoriteLanguages.includes(l.code));
+    const favorites = languages.filter((l) => favoriteLanguages.includes(l.code));
+    const others = languages.filter((l) => !favoriteLanguages.includes(l.code));
 
-  return [...favorites, ...others]
-    .filter((l) => l.code !== 'unknown')
-    .filter((l) => (
-      debouncedSearch.length === 0
-        ? l
-        : l.name.toLowerCase().includes(debouncedSearch.toLowerCase())
-    ));
+    return [...favorites, ...others]
+      .filter((l) => l.code !== 'unknown')
+      .filter((l) => (
+        debouncedSearch.length === 0
+          ? l
+          : l.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+      ));
   }, [favoriteLanguages, debouncedSearch]);
 
   return (

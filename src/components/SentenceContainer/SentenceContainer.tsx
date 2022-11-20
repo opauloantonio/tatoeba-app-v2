@@ -20,7 +20,7 @@ import { SentenceContainerProps } from './types';
 
 const NON_EXPANDED_LIST_LIMIT = 5;
 
-function SentenceContainer({ sentence }: SentenceContainerProps) {
+function SentenceContainer({ sentence, showTranslations }: SentenceContainerProps) {
   const [isExpanded, toggleIsExpanded] = useToggle(false);
 
   const directTranslations = sentence.translations[0];
@@ -44,39 +44,43 @@ function SentenceContainer({ sentence }: SentenceContainerProps) {
       )}
 
       <View style={styles.translation}>
-        <Sentence showDetailsOnPress sentence={item} />
+        <Sentence sentence={item} />
       </View>
     </View>
   );
 
   return (
     <Card style={styles.container}>
-      <Sentence showDetailsOnPress={false} sentence={sentence} />
+      <Sentence canBookmark sentence={sentence} />
 
-      <View style={styles.labelContainer}>
-        <Divider />
-      </View>
+      {showTranslations && (
+        <>
+          <View style={styles.labelContainer}>
+            <Divider />
+          </View>
 
-      {!hasDirectTranslations && hasIndirectTranslations && (
-        <View style={styles.labelContainer}>
-          <Text variant="labelMedium">No direct translations</Text>
-        </View>
-      )}
+          {!hasDirectTranslations && hasIndirectTranslations && (
+            <View style={styles.labelContainer}>
+              <Text variant="labelMedium">No direct translations</Text>
+            </View>
+          )}
 
-      {!hasDirectTranslations && !hasIndirectTranslations && (
-      <View style={styles.labelContainer}>
-        <Text variant="labelMedium">This sentence has no translations</Text>
-      </View>
-      )}
+          {!hasDirectTranslations && !hasIndirectTranslations && (
+            <View style={styles.labelContainer}>
+              <Text variant="labelMedium">This sentence has no translations</Text>
+            </View>
+          )}
 
-      {visibleTranslations.map(renderTranslation)}
+          {visibleTranslations.map(renderTranslation)}
 
-      {allTranslations.length > NON_EXPANDED_LIST_LIMIT && (
-        <View style={styles.buttonContainer}>
-          <Button mode="outlined" onPress={toggleIsExpanded}>
-            SHOW {isExpanded ? 'LESS' : 'MORE'}
-          </Button>
-        </View>
+          {allTranslations.length > NON_EXPANDED_LIST_LIMIT && (
+            <View style={styles.buttonContainer}>
+              <Button mode="outlined" onPress={toggleIsExpanded}>
+                SHOW {isExpanded ? 'LESS' : 'MORE'}
+              </Button>
+            </View>
+          )}
+        </>
       )}
     </Card>
   );

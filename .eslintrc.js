@@ -20,6 +20,8 @@ module.exports = {
         'react-native/no-inline-styles': 'off',
         'max-len': ['error', { 'code': 100 }],
         'eslint-comments/no-unlimited-disable': 'off',
+        'no-new': 'off',
+        'indent': ['error', 2],
       },
     },
   ],

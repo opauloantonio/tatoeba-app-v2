@@ -1,16 +1,10 @@
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  ListRenderItem,
-} from 'react-native';
-
 import Error from '@components/Error';
-import SentenceContainer from '@components/SentenceContainer';
+import SentenceList from '@components/SentenceList';
 
 import useHeaderTitle from '@hooks/useHeaderTitle';
 import useAppDispatch from '@hooks/useAppDispatch';
@@ -61,12 +55,6 @@ function SearchResults() {
     }
   };
 
-  const renderSearchResult: ListRenderItem<Sentence> = ({ item, index }) => (
-    <View style={{ marginBottom: 20, marginTop: index === 0 ? 20 : 0 }}>
-      <SentenceContainer sentence={item} />
-    </View>
-  );
-
   if (isError) {
     return (
       <Error
@@ -78,11 +66,10 @@ function SearchResults() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={results}
+      <SentenceList
+        showTranslations
+        sentences={results}
         onEndReached={fetchMore}
-        renderItem={renderSearchResult}
-        keyExtractor={(item) => item.id.toString()}
       />
 
       {isFetching && (

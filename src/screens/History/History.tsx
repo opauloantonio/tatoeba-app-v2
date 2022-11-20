@@ -56,11 +56,13 @@ function History() {
     );
   };
 
-  const getFlag = (code: LanguageCode) => (
-    code === '' || code === 'und'
-      ? <Icon name="earth" size={25} color={theme.colors.text} />
-      : <Image source={languages.find((l) => l.code === code)!.icon} style={styles.entryFlag} />
-  );
+  const getFlag = (code: LanguageCode) => {
+    const language = languages.find((l) => l.code === code);
+
+    return language
+      ? <Image source={language.icon} style={styles.entryFlag} />
+      : <Icon name="earth" size={25} color={theme.colors.text} />;
+  };
 
   const deleteEntry = (entry: HistoryModel) => {
     realm.write(() => {
@@ -95,10 +97,10 @@ function History() {
             <View style={styles.entryLanguagesOptionsContainer}>
               <TouchableOpacity onPress={() => deleteEntry(item)}>
                 <Icon
-                size={25}
-                name="trash-can"
-                color={theme.colors.primary}
-              />
+                  size={25}
+                  name="trash-can"
+                  color={theme.colors.primary}
+                />
               </TouchableOpacity>
             </View>
           </View>

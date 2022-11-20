@@ -63,13 +63,10 @@ function Home() {
     dispatch(submitSearchParams());
 
     realm.write(() => {
-      realm.create<History>(
-        'History',
-        {
-          timestamp: new Date(),
-          url: getSearchURL(updatedParams),
-        },
-      );
+      new History(realm, {
+        timestamp: new Date(),
+        url: getSearchURL(updatedParams),
+      });
     });
 
     navigation.navigate(ScreenName.SearchResults);

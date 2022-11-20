@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "type": "yarn tsc --skipLibCheck --noEmit"
   },
   "dependencies": {
     "@mobily/stacks": "^2.2.2",

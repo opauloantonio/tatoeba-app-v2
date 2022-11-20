@@ -1,7 +1,7 @@
 import urlcat from 'urlcat';
 import { isEmpty } from 'lodash';
-import { useState } from 'react';
 import Share from 'react-native-share';
+import { useCallback, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -29,9 +29,15 @@ import {
   BASE_TATOEBA_SENTENCE_URL,
 } from '@constants/endpoints';
 
-import { SentenceProps } from './types';
+import RealmContext from '@database/index';
 
-function Sentence({ sentence, showDetailsOnPress }: SentenceProps) {
+import { SentenceProps } from './types';
+import { Bookmark } from '@database/models/Bookmark';
+
+const { useQuery, useRealm } = RealmContext;
+
+function Sentence({ sentence, canBookmark }: SentenceProps) {
+  const realm = useRealm();
   const navigation = useNavigation<HomeNavigationProps>();
 
   const shareTitle = `Tatoeba sentence #${sentence.id}`;
@@ -40,6 +46,24 @@ function Sentence({ sentence, showDetailsOnPress }: SentenceProps) {
 
   const openMenu = () => setIsMenuVisible(true);
   const closeMenu = () => setIsMenuVisible(false);
+
+  const bookmarks = useQuery(Bookmark).filtered('sentenceId = $0', sentence.id);
+  const isBookmarked = !bookmarks.isEmpty();
+
+  const toggleBookmark = useCallback(() => {
+    realm.write(() => {
+      if (isBookmarked) {
+        realm.delete(bookmarks);
+      } else {
+        new Bookmark(realm, {
+          sentenceId: sentence.id,
+          data: JSON.stringify(sentence),
+        });
+      }
+    });
+
+    setIsMenuVisible(false);
+  }, [realm, bookmarks, sentence, isBookmarked]);
 
   const copyLink = () => {
     Share.open({
@@ -73,9 +97,7 @@ function Sentence({ sentence, showDetailsOnPress }: SentenceProps) {
   };
 
   const handleOnPress = () => {
-    if (showDetailsOnPress) {
-      navigation.navigate(ScreenName.SentenceDetails, { sentenceId: sentence.id });
-    }
+    navigation.push(ScreenName.SentenceDetails, { sentenceId: sentence.id });
   };
 
   const menuAnchor = (
@@ -124,6 +146,14 @@ function Sentence({ sentence, showDetailsOnPress }: SentenceProps) {
           onPress={copySentence}
           leadingIcon="content-copy"
         />
+
+        {canBookmark && (
+          <Menu.Item
+            onPress={toggleBookmark}
+            leadingIcon={`bookmark${isBookmarked ? '-off' : ''}`}
+            title={`${isBookmarked ? 'Remove' : 'Add'} bookmark`}
+          />
+        )}
       </Menu>
     </TouchableOpacity>
   );

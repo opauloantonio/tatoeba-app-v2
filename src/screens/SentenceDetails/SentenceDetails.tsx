@@ -3,9 +3,10 @@ import { ActivityIndicator } from 'react-native-paper';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
 import Error from '@components/Error';
-import useHeaderTitle from '@hooks/useHeaderTitle';
 import SentenceContainer from '@components/SentenceContainer';
-import { useGetSentenceByIdQuery } from '@services/tatoebaApi';
+
+import useSentence from '@hooks/useSentence';
+import useHeaderTitle from '@hooks/useHeaderTitle';
 
 import { SentenceDetailsRouteProps } from './types';
 
@@ -14,13 +15,15 @@ function SentenceDetails() {
   const { sentenceId } = route.params;
 
   useHeaderTitle(`Sentence #${sentenceId}`);
+  const { data, isFetching, refetch } = useSentence(sentenceId);
 
-  const {
-    data,
-    isError,
-    refetch,
-    isFetching,
-  } = useGetSentenceByIdQuery(sentenceId);
+  if (data) {
+    return (
+      <ScrollView style={styles.container}>
+        <SentenceContainer showTranslations sentence={data} />
+      </ScrollView>
+    );
+  }
 
   if (isFetching) {
     return (
@@ -30,19 +33,11 @@ function SentenceDetails() {
     );
   }
 
-  if (isError || !data) {
-    return (
-      <Error
-        retry={refetch}
-        message="There was an error while trying to fetch this sentence"
-      />
-    );
-  }
-
   return (
-    <ScrollView style={styles.container}>
-      <SentenceContainer sentence={data} />
-    </ScrollView>
+    <Error
+      retry={refetch}
+      message="There was an error while trying to fetch this sentence"
+    />
   );
 }
 

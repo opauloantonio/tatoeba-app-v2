@@ -1,11 +1,14 @@
 import { Configuration } from 'realm';
 import { createRealmContext } from '@realm/react';
+
 import { History } from './models/History';
+import { Bookmark } from './models/Bookmark';
 
 const config: Configuration = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   schema: [
     History,
+    Bookmark,
   ],
 };
 
