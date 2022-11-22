@@ -13,11 +13,18 @@ export const getSearchParamsFromURL = (url: string) => {
   const queryPairs = queryString.split('&');
   const params = {} as SearchParameters;
 
+  // TODO I will get rid of the ignores, someday...
+
   queryPairs.forEach((pair) => {
     const values = pair.split('=');
     // @ts-ignore
     params[decodeURIComponent((values[0]))] = decodeURIComponent(values[1]);
   });
+
+  // @ts-ignore
+  params.page = parseInt(params.page, 10);
+  // @ts-ignore
+  params.list = parseInt(params.list, 10);
 
   return params;
 };

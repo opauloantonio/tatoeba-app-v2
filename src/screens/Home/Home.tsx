@@ -26,10 +26,9 @@ import RealmContext from '@database/index';
 import { History } from '@database/models/History';
 
 import {
-  submitSearchParams,
+  resetSearchParams,
   setCurrentSearchParams,
   clearAdvancedSearchParams,
-  resetSearchParams,
 } from '@slices/search';
 
 import { getSearchURL } from '@utils/search';
@@ -58,18 +57,22 @@ function Home() {
   };
 
   const handleSubmitSearch = () => {
-    const updatedParams = { ...currentSearchParams, page: 1 };
-    dispatch(setCurrentSearchParams(updatedParams));
-    dispatch(submitSearchParams());
+    const searchParams: SearchParameters = {
+      ...currentSearchParams,
+      query: currentSearchParams.query.trim(),
+      page: 1,
+    };
+
+    dispatch(setCurrentSearchParams(searchParams));
 
     realm.write(() => {
       new History(realm, {
         timestamp: new Date(),
-        url: getSearchURL(updatedParams),
+        url: getSearchURL(searchParams),
       });
     });
 
-    navigation.navigate(ScreenName.SearchResults);
+    navigation.navigate(ScreenName.SearchResults, { searchParams });
   };
 
   const swapLanguages = () => {

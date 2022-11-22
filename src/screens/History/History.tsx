@@ -13,7 +13,6 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import useTheme from '@hooks/useTheme';
-import useAppDispatch from '@hooks/useAppDispatch';
 
 import RealmContext from '@database/index';
 import { History as HistoryModel } from '@database/models/History';
@@ -22,18 +21,15 @@ import { SearchParameters } from '@interfaces/search';
 import { getSearchParamsFromURL } from '@utils/search';
 
 import { ScreenName } from '@routes/constants';
-import { HomeNavigationProps } from '@routes/HomeTab/types';
 import { LanguageCode, languages } from '@constants/languages';
-
-import { setCurrentSearchParams } from '@slices/search';
+import { HistoryNavigationProps } from '@routes/HistoryTab/types';
 
 const { useRealm, useQuery } = RealmContext;
 
 function History() {
   const theme = useTheme();
   const realm = useRealm();
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation<HomeNavigationProps>();
+  const navigation = useNavigation<HistoryNavigationProps>();
 
   const searchHistory = useQuery(HistoryModel).sorted('timestamp', true);
 
@@ -70,9 +66,8 @@ function History() {
     });
   };
 
-  const navigateToSearch = (params: SearchParameters) => {
-    dispatch(setCurrentSearchParams(params));
-    navigation.navigate(ScreenName.SearchResults);
+  const navigateToSearch = (searchParams: SearchParameters) => {
+    navigation.push(ScreenName.SearchResults, { searchParams });
   };
 
   const renderItem: ListRenderItem<HistoryModel> = ({ item }) => {

@@ -56,6 +56,7 @@ function Sentence({ sentence, canBookmark }: SentenceProps) {
         realm.delete(bookmarks);
       } else {
         new Bookmark(realm, {
+          timestamp: new Date(),
           sentenceId: sentence.id,
           data: JSON.stringify(sentence),
         });

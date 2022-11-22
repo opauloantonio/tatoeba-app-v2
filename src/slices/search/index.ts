@@ -14,7 +14,6 @@ const initialSearchParams = { page, query, to, from };
 const initialState: SearchState = {
   favoriteLanguages: [],
   currentSearchParams: initialSearchParams,
-  submittedSearchParams: initialSearchParams,
 };
 
 export const searchSlice = createSlice({
@@ -23,12 +22,6 @@ export const searchSlice = createSlice({
   reducers: {
     setCurrentSearchParams(state, { payload }: PayloadAction<Partial<SearchParameters>>) {
       state.currentSearchParams = { ...state.currentSearchParams, ...payload };
-    },
-    submitSearchParams(state) {
-      state.submittedSearchParams = {
-        ...state.currentSearchParams,
-        query: state.currentSearchParams.query.trim(),
-      };
     },
     toggleFavoriteLanguage(state, { payload }: PayloadAction<LanguageCode>) {
       state.favoriteLanguages = xor(state.favoriteLanguages, [payload]);
@@ -49,7 +42,6 @@ export const searchSlice = createSlice({
 
 export const {
   resetSearchParams,
-  submitSearchParams,
   setCurrentSearchParams,
   toggleFavoriteLanguage,
   clearAdvancedSearchParams,

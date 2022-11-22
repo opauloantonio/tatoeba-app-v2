@@ -5,12 +5,19 @@ import useTheme from '@hooks/useTheme';
 import useAppDispatch from '@hooks/useAppDispatch';
 import useAppSelector from '@hooks/useAppSelector';
 
+import { ThemeName } from '@themes/types';
 import { changeTheme } from '@slices/settings';
 
 const profile = 'https://github.com/opauloantonio/';
 const repo = 'https://github.com/opauloantonio/tatoeba-app-v2/';
 const howToSearch = 'https://en.wiki.tatoeba.org/articles/show/text-search';
 const ryou = 'https://play.google.com/store/apps/details?id=com.ryouflashcards';
+
+const themeDescrition: Record<ThemeName, string> = {
+  'system': 'System default',
+  'light': 'Always light',
+  'dark': 'Always dark',
+};
 
 function About() {
   const { colors } = useTheme();
@@ -38,8 +45,8 @@ function About() {
 
       <List.Item
         title="Theme"
-        description={theme}
         onPress={handleTheme}
+        description={themeDescrition[theme]}
         left={iconProps => <List.Icon {...iconProps} icon="white-balance-sunny" />}
       />
 
@@ -47,7 +54,7 @@ function About() {
         title="Search Help"
         onPress={handleLink.howToSearch}
         left={iconProps => <List.Icon {...iconProps} icon="help-circle" />}
-        description="Click here to learn how to better search text on Tatoeba "
+        description="Click here to learn how to better search for text on Tatoeba "
       />
 
       <Divider />

@@ -10,7 +10,7 @@ const { useQuery, useRealm } = RealmContext;
 
 function Bookmarks() {
   const realm = useRealm();
-  const bookmarks = useQuery(BookmarkModel);
+  const bookmarks = useQuery(BookmarkModel).sorted('timestamp', true);
   const sentences: Sentence[] = bookmarks.map((b) => JSON.parse(b.data));
 
   const clearBookmarks = () => {

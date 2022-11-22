@@ -1,57 +1,34 @@
-import { uniqBy } from 'lodash';
-import { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native-paper';
 
 import Error from '@components/Error';
 import SentenceList from '@components/SentenceList';
 
 import useHeaderTitle from '@hooks/useHeaderTitle';
-import useAppDispatch from '@hooks/useAppDispatch';
-import useAppSelector from '@hooks/useAppSelector';
+import useSearchResults from '@hooks/useSearchResults';
 
-import { Sentence } from '@interfaces/api';
-import { useGetSearchResultsQuery } from '@services/tatoebaApi';
-import { setCurrentSearchParams, submitSearchParams } from '@slices/search';
+import { SearchResultsRouteProps } from './types';
 
 function SearchResults() {
-  const dispatch = useAppDispatch();
+  const route = useRoute<SearchResultsRouteProps>();
 
-  const [page, setPage] = useState(0);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [results, setResults] = useState<Sentence[]>([]);
-
-  const { submittedSearchParams } = useAppSelector((state) => state.search);
+  const { searchParams } = route.params;
 
   const {
     data,
     isError,
-    isFetching,
     refetch,
-  } = useGetSearchResultsQuery(submittedSearchParams);
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useSearchResults(searchParams);
 
-  useHeaderTitle(`Results for "${submittedSearchParams.query}"`);
-
-  useEffect(() => {
-    if (submittedSearchParams.page > page) {
-      if (data?.results) {
-        setResults(uniqBy([...results, ...data.results], (s) => s.id));
-      }
-
-      if (data?.paging) {
-        const { count, perPage, page: currentPage } = data.paging.Sentences;
-        const numberOfPages = Math.ceil(count / perPage);
-        setHasNextPage(numberOfPages > page);
-        setPage(currentPage);
-      }
-    }
-    // eslint-disable-next-line
-  }, [data, submittedSearchParams.page]);
+  useHeaderTitle(`Results for "${searchParams.query}"`);
 
   const fetchMore = () => {
     if (hasNextPage && !isFetching) {
-      dispatch(setCurrentSearchParams({ page: submittedSearchParams.page + 1 }));
-      dispatch(submitSearchParams());
+      fetchNextPage();
     }
   };
 
@@ -68,7 +45,7 @@ function SearchResults() {
     <View style={styles.container}>
       <SentenceList
         showTranslations
-        sentences={results}
+        sentences={data}
         onEndReached={fetchMore}
       />
 

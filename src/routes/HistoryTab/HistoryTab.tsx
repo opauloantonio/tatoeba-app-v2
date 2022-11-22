@@ -1,16 +1,25 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { defaultStackScreenOptions } from '@routes/constants';
+import { defaultStackScreenOptions, ScreenName } from '@routes/constants';
+
+import SearchResults from '@screens/SearchResults';
 import History from '@screens/History';
 
-const { Navigator, Screen } = createStackNavigator();
+import { HistoryStackParamList } from './types';
+
+const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>();
 
 function HistoryTab() {
   return (
     <Navigator screenOptions={defaultStackScreenOptions}>
       <Screen
-        name="History"
         component={History}
+        name={ScreenName.History}
         options={{ headerTitle: 'History' }}
+      />
+
+      <Screen
+        name={ScreenName.SearchResults}
+        component={SearchResults}
       />
     </Navigator>
   );
