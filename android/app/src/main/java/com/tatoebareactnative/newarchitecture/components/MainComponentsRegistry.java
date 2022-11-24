@@ -1,4 +1,4 @@
-package com.tatoebaappv2.newarchitecture.components;
+package com.tatoebareactnative.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

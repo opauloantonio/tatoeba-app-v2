@@ -1,4 +1,4 @@
-package com.tatoebaappv2;
+package com.tatoebareactnative;
 
 import android.os.Bundle;
 

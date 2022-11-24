@@ -1,4 +1,4 @@
-package com.tatoebaappv2.newarchitecture.modules;
+package com.tatoebareactnative.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

@@ -1,4 +1,4 @@
-package com.tatoebaappv2.newarchitecture;
+package com.tatoebareactnative.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.tatoebaappv2.BuildConfig;
-import com.tatoebaappv2.newarchitecture.components.MainComponentsRegistry;
-import com.tatoebaappv2.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.tatoebareactnative.BuildConfig;
+import com.tatoebareactnative.newarchitecture.components.MainComponentsRegistry;
+import com.tatoebareactnative.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
