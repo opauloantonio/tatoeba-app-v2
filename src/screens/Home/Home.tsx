@@ -94,6 +94,7 @@ function Home() {
     <ScrollView style={styles.container}>
       <View style={styles.content}>
         <Searchbar
+          accessibilityLabel="search input"
           value={currentSearchParams.query}
           placeholder="Search for sentences"
           onSubmitEditing={handleSubmitSearch}
@@ -106,12 +107,15 @@ function Home() {
           style={styles.languageChoiceWrapper}
           onPress={() => navigation.navigate(ScreenName.ChooseLanguage, { target: 'from' })}
         >
-          <Text style={{ ...styles.languageChoice, color: theme.colors.primary }}>
+          <Text
+            testID="fromLang"
+            style={{ ...styles.languageChoice, color: theme.colors.primary }}
+          >
             {getLanguageName(currentSearchParams.from)}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={swapLanguages}>
+        <TouchableOpacity onPress={swapLanguages} testID="switchLangs">
           <Text style={styles.swapLanguagesIcon}>
             <Icon
               size={25}
@@ -126,6 +130,7 @@ function Home() {
           onPress={() => navigation.navigate(ScreenName.ChooseLanguage, { target: 'to' })}
         >
           <Text
+            testID="toLang"
             style={{
               ...styles.languageChoice,
               color: theme.colors.primary,

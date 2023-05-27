@@ -25,5 +25,10 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['.eslintrc.js', 'babel.config.js', 'metro.config.js'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'babel.config.js',
+    'metro.config.js',
+    'e2e/**/*.js',
+  ],
 };
