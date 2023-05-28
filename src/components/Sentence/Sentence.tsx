@@ -102,7 +102,10 @@ function Sentence({ sentence, canBookmark }: SentenceProps) {
   };
 
   const menuAnchor = (
-    <TouchableOpacity onPress={openMenu}>
+    <TouchableOpacity
+      onPress={openMenu}
+      testID={canBookmark ? 'mainSentenceMenuAnchor' : undefined}
+    >
       <Icon size={20} name="information" />
     </TouchableOpacity>
   );

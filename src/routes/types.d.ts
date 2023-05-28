@@ -1,6 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScreenName } from './constants';
 
+export type BottomTabIconProps = {
+  color: string;
+  focused: boolean;
+};
+
 export type RootStackParamList = {
   [ScreenName.HomeTab]: undefined;
   [ScreenName.AboutTab]: undefined;

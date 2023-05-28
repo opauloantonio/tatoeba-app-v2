@@ -1,8 +1,8 @@
-const initialToLang = 'English';
-const initialFromLang = 'Portuguese';
-const searchText = 'Nice job';
-
 describe('When launching the app, the user', () => {
+  const initialToLang = 'English';
+  const initialFromLang = 'Portuguese';
+  const searchText = 'Nice job';
+
   beforeAll(async () => {
     await device.launchApp();
   });

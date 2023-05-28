@@ -1,4 +1,9 @@
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { useCallback } from 'react';
+
+import {
+  createMaterialBottomTabNavigator,
+} from '@react-navigation/material-bottom-tabs';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import useTheme from '@hooks/useTheme';
@@ -10,12 +15,29 @@ import HistoryTab from './HistoryTab';
 import BookmarksTab from './BookmarksTab';
 
 import { ScreenName, BottomTabLabel } from './constants';
+import { BottomTabIconProps } from './types';
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator();
 
 function BottomTabs() {
   useHideSplashScreen();
   const theme = useTheme();
+
+  const HomeIcon = useCallback(({ color }: BottomTabIconProps) => (
+    <Icon size={25} color={color} name="home" testID="home-tab" />
+  ), []);
+
+  const BookmarksIcon = useCallback(({ color }: BottomTabIconProps) => (
+    <Icon size={25} color={color} name="bookmark" testID="bookmarks-tab" />
+  ), []);
+
+  const HistoryIcon = useCallback(({ color }: BottomTabIconProps) => (
+    <Icon size={25} color={color} name="history" testID="history-tab" />
+  ), []);
+
+  const AboutIcon = useCallback(({ color }: BottomTabIconProps) => (
+    <Icon size={25} color={color} name="information" testID="about-tab" />
+  ), []);
 
   return (
     <Navigator activeColor={theme.colors.primary}>
@@ -24,7 +46,7 @@ function BottomTabs() {
         component={HomeTab}
         options={{
           tabBarLabel: BottomTabLabel.Home,
-          tabBarIcon: ({ color }) => <Icon size={25} color={color} name="home" />,
+          tabBarIcon: HomeIcon,
         }}
       />
 
@@ -33,7 +55,7 @@ function BottomTabs() {
         component={BookmarksTab}
         options={{
           tabBarLabel: BottomTabLabel.Bookmarks,
-          tabBarIcon: ({ color }) => <Icon size={25} color={color} name="bookmark" />,
+          tabBarIcon: BookmarksIcon,
         }}
       />
 
@@ -42,7 +64,7 @@ function BottomTabs() {
         component={HistoryTab}
         options={{
           tabBarLabel: BottomTabLabel.History,
-          tabBarIcon: ({ color }) => <Icon size={25} color={color} name="history" />,
+          tabBarIcon: HistoryIcon,
         }}
       />
 
@@ -51,7 +73,7 @@ function BottomTabs() {
         component={AboutTab}
         options={{
           tabBarLabel: BottomTabLabel.About,
-          tabBarIcon: ({ color }) => <Icon size={25} color={color} name="information" />,
+          tabBarIcon: AboutIcon,
         }}
       />
     </Navigator>
