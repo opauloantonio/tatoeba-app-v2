@@ -1,0 +1,37 @@
+objetivos com esta versão:
+
+    recriar o app do tatoeba com as coisas novas que aprendi nos últimos meses:
+
+        safe area
+        stacks
+        redux toolkit
+        rtk query
+        typescript
+
+    usar a API do tatoeba já que o meu scraper vai parar de funcionar em novembro
+    
+    adicionar certas melhorias:
+        áudios
+            [done] reproduzir
+            [deferred] fazer o download dos áudios
+            [deferred] compartilhar link e arquivo de áudio?
+
+        [done] poder copiar textos das frases
+        [done] compartilhar texto e links das frases
+        
+        compartilhar links:
+            [done] da frase
+            [done] do áudio
+            [deferred] da pesquisa
+
+        changelog
+        [done] histórico
+        frase aleatória
+        uso dos bookmarks offline
+        anúncios, quero rendas extras
+        [done] busca por parâmetros avançados
+        [deferred] mudar parâmetros da pesquisa sem sair da tela de resultados
+        
+        [deferred] navegação aos perfis dos usuários
+        [deferred] wall ?
+
